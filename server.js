@@ -17,7 +17,6 @@ let kickQueue = [];
 
 app.post('/roblox/kick', (req, res) => {
   const { username, reason } = req.body;
-  const { reason } = req.body;
   if (!username) return res.status(400).json({ error: 'Missing username' });
 
   // Store the command in a queue
