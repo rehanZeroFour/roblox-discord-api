@@ -15,7 +15,8 @@ app.use((req, res, next) => {
 
 app.post('/roblox/kick', (req, res) => {
   const { username } = req.body;
-  console.log(`Kick command received for ${username}`);
+  const { reason } = req.body;
+  console.log(`Kick command received for ${username} and the reason is ${reason}`);
   res.json({ status: 'kick received' });
 });
 
