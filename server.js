@@ -13,12 +13,27 @@ app.use((req, res, next) => {
   next();
 });
 
+let kickQueue = [];
+
 app.post('/roblox/kick', (req, res) => {
-  const { username } = req.body;
+  const { username, reason } = req.body;
   const { reason } = req.body;
-  console.log(`Kick command received for ${username} and the reason is ${reason}`);
-  res.json({ status: 'kick received' });
+  if (!username) return res.status(400).json({ error: 'Missing username' });
+
+  // Store the command in a queue
+  kickQueue.push({ username, reason });
+  console.log(`Queued kick: ${username} - ${reason}`);
+
+  res.json({ success: true, message: `Kick command queued for ${username}` });
 });
+
+// Roblox will poll this
+app.get('/roblox/kick-queue', (req, res) => {
+  const commands = [...kickQueue];
+  kickQueue = []; // Clear after sending
+  res.json(commands);
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
