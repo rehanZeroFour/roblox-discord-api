@@ -35,12 +35,12 @@ app.get('/roblox/kick-queue', (req, res) => {
 });
 // Spawn Functions
 app.post('/roblox/spawn', (req, res) => {
-  const { username, pokemon, level } = req.body;
+  const { username, pokemon, level, shiny } = req.body;
   if (!username) return res.status(400).json({ error: 'Missing username' });
 
   // Store the command in a queue
-  spawnQueue.push({ username, pokemon, level });
-  console.log(`Queued spawn: ${username} - ${pokemon} - ${level}`);
+  spawnQueue.push({ username, pokemon, level, shiny });
+  console.log(`Queued spawn: ${username} - ${pokemon} - ${level} - ${shiny}`);
 
   res.json({ success: true, message: `Spawn command queued for ${username}` });
 });
