@@ -52,6 +52,16 @@ app.get('/roblox/spawn-queue', (req, res) => {
   res.json(commands);
 });
 
+// Frequent Ping to avoid Inactivity on the Server API
+function infiniteLoopWithWait(callback, delay) {
+  setInterval(callback, delay);
+}
+
+// Example usage:
+infiniteLoopWithWait(() => {
+  console.log("Pinging to avoid inactivity.");
+}, 2000);
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
