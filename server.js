@@ -46,7 +46,7 @@ app.post('/roblox/spawn', (req, res) => {
 });
 
 // Spawn Functions
-const { sendSpawnMessage } = require('./bot.js');
+const axios = require('axios');
 
 app.post('/roblox/spawnfailure', async (req, res) => {
   const { username, pokemon, level, shiny, ha, forme } = req.body;
@@ -55,10 +55,22 @@ app.post('/roblox/spawnfailure', async (req, res) => {
 
   spawnQueue.push({ username, pokemon, level, shiny, ha, forme });
 
-  await sendSpawnMessage({ username, pokemon, level, shiny, ha, forme });
+  try {
+    await axios.post('http://your-discord-bot-url.com/discord/spawn', {
+      username,
+      pokemon,
+      level,
+      shiny,
+      ha,
+      forme
+    });
+  } catch (error) {
+    console.error('Failed to forward to Discord bot:', error.message);
+  }
 
   res.json({ success: true });
 });
+
 
 // Roblox will poll this
 app.get('/roblox/spawn-queue', (req, res) => {
