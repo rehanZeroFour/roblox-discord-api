@@ -60,7 +60,7 @@ function infiniteLoopWithWait(callback, delay) {
 // Example usage:
 infiniteLoopWithWait(() => {
   console.log("Pinging to avoid inactivity.");
-}, 2000);
+}, 200000);
 
 
 app.listen(PORT, () => {
