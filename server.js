@@ -46,8 +46,18 @@ app.post('/roblox/spawn', (req, res) => {
 });
 
 // Spawn Functions
-app.post('/roblox/spawnfailure', (req, res) => {
-  console.log(`EHEHEHEHEHE`);
+const { sendSpawnMessage } = require('./bot.js');
+
+app.post('/roblox/spawnfailure', async (req, res) => {
+  const { username, pokemon, level, shiny, ha, forme } = req.body;
+
+  if (!username) return res.status(400).json({ error: 'Missing username' });
+
+  spawnQueue.push({ username, pokemon, level, shiny, ha, forme });
+
+  await sendSpawnMessage({ username, pokemon, level, shiny, ha, forme });
+
+  res.json({ success: true });
 });
 
 // Roblox will poll this
