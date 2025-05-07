@@ -46,34 +46,43 @@ app.post('/roblox/spawn', (req, res) => {
 });
 
 // Spawn Functions
-const axios = require('axios');
+const https = require('https');
 
-app.post('/roblox/spawnfailure', async (req, res) => {
-  const { username, pokemon, level, shiny, ha, forme } = req.body;
+function sendToDiscordBot(data) {
+  const jsonData = JSON.stringify(data);
 
-  if (!username) return res.status(400).json({ error: 'Missing username' });
+  const options = {
+    hostname: 'your-discord-bot-url.com', // e.g., mybot.onrender.com
+    port: 443,
+    path: '/discord/spawn',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(jsonData),
+      'x-api-key': 'your-secret-api-key' // optional: only if bot expects it
+    }
+  };
 
-  spawnQueue.push({ username, pokemon, level, shiny, ha, forme });
-
-  try {
-    await axios.post('http://your-discord-bot-url.com/discord/spawn', {
-      username,
-      pokemon,
-      level,
-      shiny,
-      ha,
-      forme
+  const req = https.request(options, (res) => {
+    let response = '';
+    res.on('data', (chunk) => (response += chunk));
+    res.on('end', () => {
+      console.log('Discord bot response:', response);
     });
-  } catch (error) {
-    console.error('Failed to forward to Discord bot:', error.message);
-  }
+  });
 
-  res.json({ success: true });
-});
+  req.on('error', (e) => {
+    console.error('Error sending to Discord bot:', e.message);
+  });
+
+  req.write(jsonData);
+  req.end();
+}
+
 
 
 // Roblox will poll this
-app.get('/roblox/spawn-queue', (req, res) => {
+app.get('/roblox/spawnfailure', (req, res) => {
   const commands = [...spawnQueue];
   spawnQueue = []; // Clear after sending
   res.json(commands);
