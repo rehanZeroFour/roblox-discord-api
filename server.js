@@ -45,6 +45,11 @@ app.post('/roblox/spawn', (req, res) => {
   res.json({ success: true, message: `Spawn command queued for ${username}` });
 });
 
+// Spawn Functions
+app.post('/roblox/spawnfailure', (req, res) => {
+  console.log(`EHEHEHEHEHE`);
+});
+
 // Roblox will poll this
 app.get('/roblox/spawn-queue', (req, res) => {
   const commands = [...spawnQueue];
