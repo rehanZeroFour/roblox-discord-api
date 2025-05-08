@@ -6,6 +6,7 @@ const API_KEY = process.env.API_KEY;
 
 let kickQueue = [];
 let spawnQueue = [];
+let onlineSet  = new Set();
 
 app.use(express.json());
 
@@ -15,6 +16,24 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+// ► Presence update (called by your game)
+app.post('/roblox/presence-update', (req, res) => {
+  const { players } = req.body;
+  if (!Array.isArray(players)) {
+    return res.status(400).json({ error: 'Missing players array' });
+  }
+  onlineSet = new Set(players);
+  console.log(`Presence updated: [${players.join(', ')}]`);
+  res.json({ success: true });
+});
+
+// ► Presence check (called by your bot)
+app.get('/roblox/online/:username', (req, res) => {
+  const user = req.params.username;
+  res.json({ online: onlineSet.has(user) });
+});
+
 // Kick Functions
 app.post('/roblox/kick', (req, res) => {
   const { username, reason } = req.body;
