@@ -77,9 +77,6 @@ app.get('/roblox/spawn-queue', (_req, res) => {
 
 // Middleware to check auth key
 function checkAuth(req, res, next) {
-  if (req.query.auth !== API_KEY) {
-    return res.status(401).json({ error: 'Invalid API key' });
-  }
   next();
 }
 
