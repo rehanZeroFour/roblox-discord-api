@@ -83,9 +83,6 @@ function checkAuth(req, res, next) {
   next();
 }
 
-// Parse JSON body (for POST)
-app.use(express.json());
-
 // Example: /Holo/Loader
 app.all('/Holo/Loader', checkAuth, (req, res) => {
   // Do your loader logic here!
