@@ -75,8 +75,6 @@ app.get('/roblox/spawn-queue', (_req, res) => {
   res.json(commands);
 });
 
-const API_KEY = '0b95e26c1f72933d2e9114579f0a538c'; // put this in env in production
-
 // Middleware to check auth key
 function checkAuth(req, res, next) {
   if (req.query.auth !== API_KEY) {
