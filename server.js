@@ -89,10 +89,26 @@ app.all('/Holo/Loader', checkAuth, (req, res) => {
   res.json({ status: 'Loader endpoint hit!', method: req.method });
 });
 
-// Example: /Holo/Teleporter
-app.all('/Holo/Teleporter', checkAuth, (req, res) => {
-  // Do your teleporter logic here!
-  res.json({ status: 'Teleporter endpoint hit!', method: req.method });
+// Add at the top of your server file
+let latestTeleportPlaceId = null; // stores current teleporter
+
+// Teleporter endpoint
+app.post('/Holo/Teleporter', checkAuth, (req, res) => {
+    const { placeId } = req.body;
+    if (!placeId) {
+        return res.status(400).json({ error: 'Missing placeId' });
+    }
+    latestTeleportPlaceId = placeId;
+    console.log(`[Teleporter] Updated placeId: ${placeId}`);
+    res.json({ status: 'Teleporter set', placeId });
+});
+
+// (Optional) Endpoint to fetch the current teleporter placeId
+app.get('/Holo/Teleporter', checkAuth, (req, res) => {
+    if (!latestTeleportPlaceId) {
+        return res.status(404).json({ error: 'Teleporter not set yet' });
+    }
+    res.json({ placeId: latestTeleportPlaceId });
 });
 
 // Example: /Holo/Assets
