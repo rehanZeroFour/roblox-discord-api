@@ -75,6 +75,40 @@ app.get('/roblox/spawn-queue', (_req, res) => {
   res.json(commands);
 });
 
+const API_KEY = '0b95e26c1f72933d2e9114579f0a538c'; // put this in env in production
+
+// Middleware to check auth key
+function checkAuth(req, res, next) {
+  if (req.query.auth !== API_KEY) {
+    return res.status(401).json({ error: 'Invalid API key' });
+  }
+  next();
+}
+
+// Parse JSON body (for POST)
+app.use(express.json());
+
+// Example: /Holo/Loader
+app.all('/Holo/Loader', checkAuth, (req, res) => {
+  // Do your loader logic here!
+  res.json({ status: 'Loader endpoint hit!', method: req.method });
+});
+
+// Example: /Holo/Teleporter
+app.all('/Holo/Teleporter', checkAuth, (req, res) => {
+  // Do your teleporter logic here!
+  res.json({ status: 'Teleporter endpoint hit!', method: req.method });
+});
+
+// Example: /Holo/Assets
+app.all('/Holo/Assets', checkAuth, (req, res) => {
+  // Do your assets logic here!
+  res.json({ status: 'Assets endpoint hit!', method: req.method });
+});
+
+app.listen(PORT, () => console.log(`API server running on port ${PORT}`));
+
+
 // Frequent Ping to avoid Inactivity on the Server API
 setInterval(() => {
   console.log("Pinging to avoid inactivity.");
