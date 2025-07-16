@@ -101,9 +101,6 @@ app.all('/Holo/Assets', checkAuth, (req, res) => {
   res.json({ status: 'Assets endpoint hit!', method: req.method });
 });
 
-app.listen(PORT, () => console.log(`API server running on port ${PORT}`));
-
-
 // Frequent Ping to avoid Inactivity on the Server API
 setInterval(() => {
   console.log("Pinging to avoid inactivity.");
